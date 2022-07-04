@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/selectFragment">
+    <fragment
+        android:id="@+id/selectFragment"
+        android:name="com.example.havadurumu.ui.SelectFragment"
+        android:label="fragment_select"
+        tools:layout="@layout/fragment_select" >
+        <action
+            android:id="@+id/action_selectFragment_to_havaFragment"
+            app:destination="@id/havaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/havaFragment"
+        android:name="com.example.havadurumu.ui.HavaFragment"
+        android:label="HavaFragment" >
+
+
+        <argument
+            android:name="lat"
+            app:argType="string" />
+        <argument
+            android:name="lon"
+            app:argType="string" />
+    </fragment>
+</navigation>
