@@ -6,13 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.navArgs
 import com.example.havadurumu.databinding.HavaFragmentBinding
-import kotlinx.coroutines.launch
 
 
 class HavaFragment : Fragment() {
@@ -34,11 +31,13 @@ class HavaFragment : Fragment() {
     ): View? {
 
         val binding = HavaFragmentBinding.inflate(inflater)
-       // binding.lifecycleOwner = requireActivity()
+        binding.progressBar.setVisibility(View.VISIBLE)
         binding.recyclerView.adapter = adapter
         viewModel.getHavaBilgisi()
+
         viewModel.days.observe(viewLifecycleOwner) {
             refreshRecyclerView()
+            binding.progressBar.setVisibility(View.INVISIBLE)
         }
         return binding.root
     }
