@@ -16,7 +16,6 @@ val contentType = "application/json".toMediaType()
 val json =Json { ignoreUnknownKeys = true }
 val retrofit2 = Retrofit.Builder()
     .baseUrl(BASE_URL2)
-    .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
     .addConverterFactory(json.asConverterFactory(contentType))
     .build()
 

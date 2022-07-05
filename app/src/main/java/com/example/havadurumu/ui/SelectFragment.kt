@@ -51,16 +51,7 @@ class SelectFragment : Fragment() {
             findNavController().navigate(action)
         }
         binding.buttonCity.setOnClickListener {
-            viewModel.cityName.value=binding.textCity.text.toString()
-            var kaykil: String =viewModel.cityName.value!!
-            Log.d("kaykil", kaykil)
             viewModel.cityCall(binding.textCity.text.toString())
-            //viewModel.viewModelScope.launch{viewLifecycleOwner.lifecycleScope.async(Dispatchers.Main) {viewModel.cityCall()}.await()}
-          //  viewModel.viewModelScope.launch { withContext(Dispatchers.IO) { viewModel.cityCall() }
-            //delay(1000L)}
-           // viewModel.viewModelScope.launch{ withContext(Dispatchers.IO) {Log.d("kaykil",viewModel.latitude.value!!)}}
-            Log.d("kaykil","launchi geçtim")
-            Log.d("kaykil",viewModel.latitude.value!!)
             val action = SelectFragmentDirections.actionSelectFragmentToHavaFragment(lat = viewModel.latitude.value!!, lon=viewModel.longitude.value!!)
             findNavController().navigate(action)
         }

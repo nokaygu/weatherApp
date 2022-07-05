@@ -17,8 +17,6 @@ class HavaViewModel : ViewModel() {
     val longitude: MutableLiveData<String> = _longitude
     private val _days=MutableLiveData<List<Daily>>()
     val days: LiveData<List<Daily>> = _days
-    private val _cityName=MutableLiveData<String>()
-    val cityName: MutableLiveData<String> = _cityName
     init {
 
     }
@@ -27,8 +25,6 @@ class HavaViewModel : ViewModel() {
      fun getHavaBilgisi() {
         viewModelScope.launch {
             try {
-                Log.d("kaykil", "weathercall")
-                Log.d("kaykil", _longitude.value.toString())
                 val result = HavaApi.retrofitService
                     .getWeathers(
                         _latitude.value!!,
@@ -41,7 +37,7 @@ class HavaViewModel : ViewModel() {
                 val obj = Json.decodeFromString<HavaBilgisi>(result)
                 _days.value = obj.daily
             } catch (e: Exception) {
-                Log.d("kaykil", "taytildim", e)
+                Log.d("error", "error", e)
             }
         }
     }

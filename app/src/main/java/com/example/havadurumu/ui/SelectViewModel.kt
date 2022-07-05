@@ -20,8 +20,7 @@ class SelectViewModel : ViewModel() {
     val latitude: MutableLiveData<String> = _latitude
     private val _longitude = MutableLiveData<String>()
     val longitude: MutableLiveData<String> = _longitude
-    private val _cityName = MutableLiveData<String>()
-    val cityName: MutableLiveData<String> = _cityName
+
 
     init {
         Log.d("kaykil", "noluyor")
