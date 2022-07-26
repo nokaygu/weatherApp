@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.havadurumu.config
 import com.example.havadurumu.network.*
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
@@ -17,8 +18,7 @@ class HavaViewModel : ViewModel() {
     val longitude: MutableLiveData<String> = _longitude
     private val _days=MutableLiveData<List<Daily>>()
     val days: LiveData<List<Daily>> = _days
-    private val _cityName=MutableLiveData<String>()
-    val cityName: MutableLiveData<String> = _cityName
+
     init {
 
     }
@@ -27,21 +27,19 @@ class HavaViewModel : ViewModel() {
      fun getHavaBilgisi() {
         viewModelScope.launch {
             try {
-                Log.d("kaykil", "weathercall")
-                Log.d("kaykil", _longitude.value.toString())
                 val result = HavaApi.retrofitService
                     .getWeathers(
                         _latitude.value!!,
                         _longitude.value!!,
-                        "current,minutely,hourly,alerts",
-                        "b1d5aca6b72b2d27342db242ad3d6b24",
-                        "tr",
-                        "metric"
+                        config.exclude,
+                        config.appid,
+                        config.lang,
+                        config.units
                     )
                 val obj = Json.decodeFromString<HavaBilgisi>(result)
                 _days.value = obj.daily
             } catch (e: Exception) {
-                Log.d("kaykil", "taytildim", e)
+
             }
         }
     }

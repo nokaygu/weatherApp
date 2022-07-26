@@ -1,13 +1,15 @@
 package com.example.havadurumu.ui
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.example.havadurumu.config
 import com.example.havadurumu.network.CityApiServis
 import com.example.havadurumu.network.CityItem
 import com.example.havadurumu.network.retrofit2
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class SelectViewModel : ViewModel() {
@@ -16,25 +18,32 @@ class SelectViewModel : ViewModel() {
     private val _longitude = MutableLiveData<String>()
     val longitude: MutableLiveData<String> = _longitude
 
+    private val _openTaskEvent = MutableLiveData<Event<String>>()
+    val openTaskEvent: LiveData<Event<String>> = _openTaskEvent
     init {
 
 
     }
 
-      fun cityCall(cityname:String) {
+    fun cityCall(cityname:String) {
 
-viewModelScope.launch {runBlocking{
-    try {
-                val retrofitService : CityApiServis = retrofit2.create(CityApiServis::class.java)
-                val obj = retrofitService
-                    .getCity(cityname, "1", "b1d5aca6b72b2d27342db242ad3d6b24")
-                _latitude.value = obj[0].lat.toString()
-                _longitude.value = obj[0].lon.toFloat().toString()
+        val retrofitService2 : CityApiServis = retrofit2.create(CityApiServis::class.java)
+        val call: Call<List<CityItem>> = retrofitService2.getCity(cityname, config.limit, config.appid)
+        call.enqueue(object : Callback<List<CityItem>> {
+            override fun onResponse(
+                call: Call<List<CityItem>>,
+                response: Response<List<CityItem>>
+            ) {
+                response.body()?.let{
+                _latitude.value = it.get(0).lat.toString()
+                _longitude.value = it.get(0).lon.toString()
+                _openTaskEvent.value=Event("tamam")}
 
-            } catch (e: Exception) {
-                Log.d("error", "error", e)
+            }
 
-        }
-    }}
-}
+            override fun onFailure(call: Call<List<CityItem>>, t: Throwable) {
+                _openTaskEvent.value=Event("problem")
+            }
+        })
+    }
 }

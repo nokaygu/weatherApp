@@ -16,13 +16,12 @@ class HavaFragment : Fragment() {
 
     private val viewModel: HavaViewModel by viewModels()
 
-    val args: HavaFragmentArgs by navArgs()
 
     val adapter = ItemAdapter()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.latitude.value=args.lat
-        viewModel.longitude.value=args.lon
+        viewModel.latitude.value=arguments?.getString("lat")
+        viewModel.longitude.value=arguments?.getString("lon")
     }
 
     override fun onCreateView(

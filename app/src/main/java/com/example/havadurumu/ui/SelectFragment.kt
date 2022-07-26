@@ -4,15 +4,20 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.havadurumu.R
 import com.example.havadurumu.databinding.FragmentSelectBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -25,6 +30,20 @@ class SelectFragment : Fragment() {
 
     private val viewModel: SelectViewModel by viewModels()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.openTaskEvent.observe(this, EventObserver {
+            if(it=="problem"){
+                Toast.makeText(requireContext(), "yanlış lokasyon", Toast.LENGTH_SHORT).show()
+            }
+            else{
+            val bundle= bundleOf("lat" to viewModel.latitude.value!!,
+                "lon" to viewModel.longitude.value!!)
+
+                findNavController().navigate(R.id.action_selectFragment_to_havaFragment, bundle)}
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,23 +65,26 @@ class SelectFragment : Fragment() {
                     if (location == null)
                         Toast.makeText(requireContext(), "Cannot get location.", Toast.LENGTH_SHORT).show()
                     else {
-                        val action = SelectFragmentDirections.actionSelectFragmentToHavaFragment(lat = location.latitude.toString(),
-                            lon=location.longitude.toString())
-                        findNavController().navigate(action)
+
+                        val bundle= bundleOf("lat" to location.latitude.toString(),
+                            "lon" to location.longitude.toString())
+                        findNavController().navigate(R.id.action_selectFragment_to_havaFragment, bundle)
+
                     }
 
                 }
 
         }
+        val autotextView=binding.textCity
+        val citynames
+                = resources.getStringArray(R.array.city_names)
+        val adapter
+                = ArrayAdapter(requireContext(),
+            android.R.layout.simple_list_item_1, citynames)
+        autotextView.setAdapter(adapter)
         binding.buttonCity.setOnClickListener {
             viewModel.cityCall(binding.textCity.text.toString())
-            if(viewModel.latitude.value==null){
-                Toast.makeText(requireContext(), "yanlış lokasyon", Toast.LENGTH_SHORT).show()
-            }
-            else{
-            val action = SelectFragmentDirections.actionSelectFragmentToHavaFragment(lat = viewModel.latitude.value!!,
-                lon=viewModel.longitude.value!!)
-            findNavController().navigate(action)}
+
         }
 
         return binding.root

@@ -2,6 +2,7 @@ package com.example.havadurumu.network
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -17,9 +18,9 @@ val retrofit2 = Retrofit.Builder()
 
 interface CityApiServis {
     @GET("direct")
-   suspend fun getCity(
+    fun getCity(
         @Query("q") q :String,
         @Query("limit") limit : String,
         @Query("appid") appid: String
-    ):List<CityItem>
+    ): Call<List<CityItem>>
 }

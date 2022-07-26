@@ -19,11 +19,6 @@
         android:label="HavaFragment" >
 
 
-        <argument
-            android:name="lat"
-            app:argType="string" />
-        <argument
-            android:name="lon"
-            app:argType="string" />
+
     </fragment>
 </navigation>
